@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7502903555425439,
+      "y": 4.188203389129424
+    },
+    "rotation": -60.18583726220131
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SthreeNthree"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N3Right"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
