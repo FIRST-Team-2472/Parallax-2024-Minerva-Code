@@ -37,7 +37,7 @@ public class RobotStateEstimator {
 
         if(poseEstimator == null){
             poseEstimator = new SwerveDrivePoseEstimator(
-                Constants.Drivetrain.kinematics, 
+                Constants.DriveConstants.kDriveKinematics, 
                 robotState.getGyroRotation(), 
                 robotState.getModulePositions(),
                 robotState.getInitialPose(),
@@ -55,51 +55,8 @@ public class RobotStateEstimator {
                 robotState.getModulePositions()
             );
         }
-
-        /*
-         * Vision updates
-         */
-        
-        for(VisionUpdate visionUpdate : robotState.getVisionUpdates()){
-            Pose2d visionPose = visionUpdate.estimatedPose.toPose2d();
-            double xyStds = 100;
-            double highestAmbiguity = 0;
-            double rotStds = 99999999;
-
-            List<PhotonTrackedTarget> targets = visionUpdate.targetsUsed;
-            boolean foundTag1 = false;
-            boolean foundTag2 = false;
-
-            // check list of seen targets and if we see both speaker tags
-            for (PhotonTrackedTarget target : targets) {
-                if(target.getFiducialId() == 3 || target.getFiducialId() == 7){
-                    foundTag1 = true;
-                } else if (target.getFiducialId() == 4 || target.getFiducialId() == 8){
-                    foundTag2 = true;
-                }
-
-                if(highestAmbiguity < target.getPoseAmbiguity()) {
-                    highestAmbiguity = target.getPoseAmbiguity();
-                }
-            }
-
-            // if we see both speaker tags, make the pose estimator trust rotation from tags more
-            if(foundTag1 && foundTag2 && highestAmbiguity < 0.05) {
-                rotStds = 0.2;
-            }
-
-            xyStds = xyStds * highestAmbiguity;
-
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, rotStds));
-
-            poseEstimator.addVisionMeasurement(
-                visionPose,
-                visionUpdate.timestampSeconds
-            );
-        }
-
-        robotState.updateRobotPose(poseEstimator.getEstimatedPosition()); 
     }
+
 
     /**
      * Reset the position of SwerveDrivePoseEstimator and set the NavX Offset

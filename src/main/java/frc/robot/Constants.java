@@ -214,4 +214,20 @@ public static final class AutoAimingConstants{
     public static final Pose2d redSpeakerPos = new Pose2d(new Translation2d(16.5, 5.55), new Rotation2d());
   }
 
+  public static final class FieldConstants{
+            //got from cad model
+            public static final Translation2d RED_SPEAKER_LOCATION = 
+            new Translation2d(Units.inchesToMeters(651.157), Units.inchesToMeters(218.416));
+            public static final Translation2d BLUE_SPEAKER_LOCATION = 
+            new Translation2d(Units.inchesToMeters(0.066), Units.inchesToMeters(218.415));
+            
+            public static final Translation2d RED_SPEAKER_AIM_LOCATION = 
+            new Translation2d(Units.inchesToMeters(643.157), Units.inchesToMeters(218.416));
+            public static final Translation2d BLUE_SPEAKER_AIM_LOCATION = 
+            new Translation2d(Units.inchesToMeters(8), Units.inchesToMeters(218.415));
+
+            public static final double BLUE_WING_LINE = Units.inchesToMeters(240);
+            public static final double RED_WING_LINE = Units.inchesToMeters(410);
+  }
+
 }
