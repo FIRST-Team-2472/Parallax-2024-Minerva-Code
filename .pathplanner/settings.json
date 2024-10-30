@@ -3,6 +3,7 @@
   "robotLength": 1.21,
   "holonomicMode": true,
   "pathFolders": [
+    "Random Spot to Notes",
     "Note to note paths",
     "Speaker to notes paths"
   ],
