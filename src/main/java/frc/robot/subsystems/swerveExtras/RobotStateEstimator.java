@@ -40,9 +40,9 @@ public class RobotStateEstimator {
                 Constants.DriveConstants.kDriveKinematics, 
                 robotState.getGyroRotation(), 
                 robotState.getModulePositions(),
-                robotState.getInitialPose(),
-                Constants.Drivetrain.ODOMETRY_STDDEV,
-                Constants.Vision.VISION_STDDEV
+                robotState.getInitialPose()
+                //,Constants.Drivetrain.ODOMETRY_STDDEV,
+                //Constants.Vision.VISION_STDDEV
             );
         }
         
