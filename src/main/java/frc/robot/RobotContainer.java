@@ -41,6 +41,10 @@ import frc.robot.subsystems.ArmSubsystems.PitchMotorSubsystem;
 import frc.robot.subsystems.ArmSubsystems.ShootingMotorSubsystem;
 
 public class RobotContainer {
+
+  private RobotState robotState = RobotState.getInstance();
+
+
   private final String SPtwoNtwoNone = "3 notes in speaker Speaker 2 Note 2 - 1 - TESTED", SPtwoNtwo = "2 notes in speaker Seaker 2 Note 2 - TESTED",
   SPtwoNoneNtwoNthree = "4 notes in speaker from Speaker 2 Notes 1 - 2 - 3", SPtwoNthreeNtwoNoneNfour = "4 in speaker Speaker 2 Notes 3 - 2 - 1 - 4",
   SPtwoNoneNfour = "3 in speaker Speaker 2 Notes 2 - 1 pick up 4", SPtwoNtwoNfour = "3 in speaker Speaker 2 Notes 2 - 4",
