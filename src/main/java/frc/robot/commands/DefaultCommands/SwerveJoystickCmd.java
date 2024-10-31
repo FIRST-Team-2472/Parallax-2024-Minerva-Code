@@ -58,6 +58,10 @@ public class SwerveJoystickCmd extends Command {
             turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
         }
 
+        xSpeed *= .6;
+        ySpeed *= .6;
+        turningSpeed *= .6;
+        
         swerveSubsystem.executeJoystickRunFromField(xSpeed, ySpeed, turningSpeed);
 
 
