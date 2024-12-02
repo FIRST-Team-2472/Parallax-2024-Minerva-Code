@@ -38,7 +38,7 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-    public static final double kDeadband = 0.1;
+    public static final double kDeadband = 0.05;
     public static final double kArmDeadband = 0.1;
     public static final int kLeftDriverYAxis = 1; // conflicts with other constants
     public static final int kLeftDriverXAxis = 0; // conflicts with other constants
