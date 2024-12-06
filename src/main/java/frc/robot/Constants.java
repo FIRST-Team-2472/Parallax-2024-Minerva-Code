@@ -189,6 +189,10 @@ public final class Constants {
     public static final double kPAngleController = 0.3;
     public static final double kAcceptableDistanceError = 0.12;
     public static final double kAcceptableAngleError = 1.5;
+
+    public static final double kCameraWeight = 15;
+
+    public static final double kSwerveWeight = 100;
 }
   
 public static final class PneumaticsConstants{

@@ -44,7 +44,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     RobotStateEstimator.getInstance().updateRobotPoseEstimator();
-    RobotState.getInstance().output();
     CommandScheduler.getInstance().run();
   }
 

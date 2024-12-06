@@ -34,6 +34,7 @@ import frc.robot.subsystems.swerveExtras.AccelerationLimiter;
 import frc.robot.subsystems.swerveExtras.LimelightHelpers;
 import frc.robot.subsystems.swerveExtras.SwerveModule;
 import frc.robot.subsystems.swerveExtras.LimelightHelpers.LimelightResults;
+import frc.robot.RobotState;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(//
@@ -346,16 +347,16 @@ public class SwerveSubsystem extends SubsystemBase {
         LimelightResults llr = LimelightHelpers.getLatestResults("limelight-shooter");
         int fiducialCount = llr.targetingResults.targets_Fiducials.length;
 
-        if (!DriverStation.isAutonomous() && !camsDisabled && fiducialCount >= 2 && frontLeft.getDriveVelocity() < 0.2) { // Make sure there are at least 2 AprilTags in sight for accuracy
+        if (!DriverStation.isAutonomous() && !camsDisabled && fiducialCount >= 2 && frontLeft.getDriveVelocity() < 0.2 ) { // Make sure there are at least 2 AprilTags in sight for accuracy
             Pose2d botPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight-shooter");
 
             if(lastSeenPosition != null){
 
                 Rotation2d difference = lastSeenPosition.getRotation().minus(botPose.getRotation());
 
-                if(difference.getDegrees() < 2){
-                    resetOdometry(botPose);
-                }
+                RobotState.cameraPose = botPose;
+                RobotState.swerveOdometryPose = getPose();
+                
                     if(isOnRed())
                         setHeading(botPose.getRotation().getDegrees()+180);
                     else
