@@ -3,15 +3,22 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -67,9 +74,21 @@ public class RobotContainer {
   public static Joystick leftJoystick = new Joystick(OperatorConstants.kLeftJoyPort);
   public static Joystick rightJoystick = new Joystick(OperatorConstants.kRightJoyPort);
   
-  
+  Field2d m_field = new Field2d();
+  ChoreoTrajectory traj;
 
   public RobotContainer() {
+    traj = Choreo.getTrajectory("Trajectory");
+
+    m_field.getObject("traj").setPoses(
+      traj.getInitialPose(), traj.getFinalPose()
+    );
+    m_field.getObject("trajPoses").setPoses(
+      traj.getPoses()
+    );
+
+    SmartDashboard.putData(m_field);
+
     pitchMotorSubsystem.setDefaultCommand(new PitchMotorCmd(pitchMotorSubsystem, () -> xbox.getLeftY(), () -> leftJoystick.getRawButton(1), () -> swerveSubsystem.getPose())); // Intake Motors
     intakeMotorSubsystem.setDefaultCommand(new IntakeMotorCmd(intakeMotorSubsystem, () -> leftJoystick.getRawButton(1),
     () -> xbox.getYButton()));
@@ -160,57 +179,38 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     System.out.println("Autos Begun");
        
-      m_autoSelected = m_chooser.getSelected();
+    var thetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-      if(m_autoSelected == test)
-        return AutoBuilder.buildAuto("test");
+    swerveSubsystem.resetOdometry(traj.getInitialPose());
 
-      if(m_autoSelected == SPtwoNtwoNone)
-        return AutoBuilder.buildAuto("SPtwoNtwoNone");
+    Command swerveCommand = Choreo.choreoSwerveCommand(
+        traj, // Choreo trajectory from above
+        swerveSubsystem::getPose, // A function that returns the current field-relative pose of the robot: your
+                               // wheel or vision odometry
+        new PIDController(Constants.AutoConstants.kPXController, 0.0, 0.0), // PIDController for field-relative X
+                                                                                   // translation (input: X error in meters,
+                                                                                   // output: m/s).
+        new PIDController(Constants.AutoConstants.kPYController, 0.0, 0.0), // PIDController for field-relative Y
+                                                                                   // translation (input: Y error in meters,
+                                                                                   // output: m/s).
+        thetaController, // PID constants to correct for rotation
+                         // error
+        (ChassisSpeeds speeds) -> m_robotDrive.drive( // needs to be robot-relative
+            speeds.vxMetersPerSecond,
+            speeds.vyMetersPerSecond,
+            speeds.omegaRadiansPerSecond,
+            false),
+        true, // Whether or not to mirror the path based on alliance (this assumes the path is created for the blue alliance)
+        swerveSubsystem // The subsystem(s) to require, typically your drive subsystem only
+    );
 
-      if(m_autoSelected == SpThreeNThreeNEight)
-        return AutoBuilder.buildAuto("SPthreeNthreeNeight");
-
-      if (m_autoSelected == SPtwoNtwo)
-        return AutoBuilder.buildAuto("SPtwoNtwo");
-
-      if(m_autoSelected == SPtwoNoneNtwoNthree)
-        return AutoBuilder.buildAuto("SPtwoNoneNtwoNthree");
-
-      if(m_autoSelected == SPtwoNthreeNtwoNoneNfour)
-        return AutoBuilder.buildAuto("SPtwoNthreeNtwoNoneNfour");
-      
-      if(m_autoSelected == SPtwoNoneNfour)
-        return AutoBuilder.buildAuto("SPtwoNoneNfour");
-      
-      if(m_autoSelected == SPtwoNtwoNfour)
-        return AutoBuilder.buildAuto("SPtwoNtwoNfour");
-
-      if(m_autoSelected == SPoneNoneNfourRSPone)
-        return AutoBuilder.buildAuto("SPoneNoneNfourRSPone");
-      
-      if(m_autoSelected == SPthreeNeightNseven)
-        return AutoBuilder.buildAuto("SPthreeNthreeNeightNseven");
-
-      if(m_autoSelected == SPthreeNfourNfive)
-        return AutoBuilder.buildAuto("SPthreeNfourNfive");
-
-      if(m_autoSelected == SPthreeNfiveNfour)
-        return AutoBuilder.buildAuto("SPthreeNfiveNfour");
-
-      if(m_autoSelected == SPthreeNthree)
-        return AutoBuilder.buildAuto("SPthreeNthree");
-
-      if(m_autoSelected == SPoneNone)
-        return AutoBuilder.buildAuto("SPoneNone");
-
-      if(m_autoSelected == SPthreeNeightNseven)
-        return AutoBuilder.buildAuto("SPthreeNeightNseven");
-
-      if(m_autoSelected == justShoot)
-        return new SequentialCommandGroup(
-          commandSequences.justShoot(swerveSubsystem, pitchMotorSubsystem, shootingMotorSubsystem, intakeMotorSubsystem)
-        );
+    return Commands.sequence(
+        Commands.runOnce(() -> swerveSubsystem.resetOdometry(traj.getInitialPose())),
+        swerveCommand,
+        swerveSubsystem.run(() -> swerveSubsystem.drive(0, 0, 0, false))
+    );
+  }
 
     return null;
   }
