@@ -1,20 +1,14 @@
 package frc.robot;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI.VSBChangeListener;
-
-import org.opencv.core.Size;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.Odometry;
 
 public class Fusion2d {
     private Pigeon2 pigeon;
@@ -49,8 +43,12 @@ public class Fusion2d {
     // u = u + a * dt;
 
     public void update() {
-        System.out.println("(" + this.pigeon.getGravityVectorX() + ", " + this.pigeon.getGravityVectorZ() + ", "
-                + this.pigeon.getGravityVectorY() + ")");
+        // System.out.println("(" + this.pigeon.getGravityVectorX() + ", " +
+        // this.pigeon.getGravityVectorZ() + ", "
+        // + this.pigeon.getGravityVectorY() + ")");
+        // System.out.println("(" + this.pigeon.getAccelerationX() + ", " +
+        // this.pigeon.getAccelerationZ() + ", "
+        // + this.pigeon.getAccelerationY() + ")");
 
         acc_x.next(
                 this.pigeon.getAccelerationX().getValueAsDouble() - this.gravityVector[0]);
@@ -71,7 +69,6 @@ public class Fusion2d {
     public Pose2d getPoseMeters() {
         return this.pose;
     }
-
 }
 
 class MovingAverage {
@@ -87,6 +84,10 @@ class MovingAverage {
     }
 
     public double next(double value) {
+        System.out.println(window.size());
+
+        value = MovingAverage.round(value, 2);
+
         window.add(value);
         sum += value;
 
@@ -99,5 +100,18 @@ class MovingAverage {
 
     public double get() {
         return sum / window.size();
+    }
+
+    /**
+     * Round to certain number of decimals
+     * 
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    public static double round(double d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Double.toString(d));
+        bd = bd.setScale(decimalPlace, RoundingMode.DOWN);
+        return bd.doubleValue();
     }
 }
