@@ -1,12 +1,5 @@
 {
-  "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.5212676579199327,
-      "y": 5.515621031242063
-    },
-    "rotation": 0.0
-  },
+  "version": "2025.0",
   "command": {
     "type": "sequential",
     "data": {
@@ -45,6 +38,7 @@
       ]
     }
   },
+  "resetOdom": true,
   "folder": "2 Note Autos",
   "choreoAuto": false
 }
