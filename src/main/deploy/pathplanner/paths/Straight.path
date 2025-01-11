@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5508684863523587,
-        "y": 5.545221859674489
+        "x": 7.7637204241071425,
+        "y": 3.9554169921874998
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5650191098531905,
-        "y": 6.267852401137939
+        "x": 7.320232803568056,
+        "y": 3.958889941459477
       },
       "isLocked": false,
-      "linkedName": "Random Spot 3"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.843437994568298,
-        "y": 7.518610421836228
+        "x": 6.128250418526785,
+        "y": 3.9554169921874998
       },
       "prevControl": {
-        "x": 1.2347748222605475,
-        "y": 7.5618944152352965
+        "x": 6.808802909414091,
+        "y": 3.9554250224181575
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Random Spot to Note",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

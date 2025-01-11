@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.912506594243959,
-        "y": 7.183134366268733
+        "x": 7.790407784598215,
+        "y": 3.970988699776785
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.109845450460133,
-        "y": 5.456419374377211
+        "x": 7.330552734375,
+        "y": 4.603258789062499
       },
       "isLocked": false,
-      "linkedName": "Note Position 1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.289990426134699,
-        "y": 4.114515152107228
+        "x": 5.365971261160714,
+        "y": 5.401186383928571
       },
       "prevControl": {
-        "x": 5.389109239756943,
-        "y": 3.7001035540532623
+        "x": 5.990749302455357,
+        "y": 5.350406947544643
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Note Position 6"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.07503545896123
   },
   "reversed": false,
-  "folder": "Note to Note",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
