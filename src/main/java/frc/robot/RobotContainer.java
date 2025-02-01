@@ -48,7 +48,7 @@ public class RobotContainer {
   SPthreeNfourNfive = "3 in speaker Speaker 3 Notes 4 - 5", SPthreeNfiveNfour = "3 in speaker Speaker 3 Notes 5 - 4",
   SPthreeNthree = "2 in speaker Speaker 3 Note 3", SPoneNone = "2 in speaker Speaker 1 Note 1", 
   SPthreeNeightNseven = "3 in speaker Speaker 3 Notes 8 - 7", SpThreeNThreeNEight = "3 in speaker out of the way stage side", test = "test",
-  justShoot = "just shoot";
+  justShoot = "just shoot", tftftest = "2025 Test";
   
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -103,6 +103,7 @@ public class RobotContainer {
     m_chooser.addOption(SpThreeNThreeNEight, SpThreeNThreeNEight);
     m_chooser.addOption(test, test);
     m_chooser.addOption(justShoot, justShoot);
+    m_chooser.addOption(tftftest, tftftest);
     
 
     ShuffleboardTab driverBoard = Shuffleboard.getTab("Driver Board");
@@ -161,6 +162,7 @@ public class RobotContainer {
     System.out.println("Autos Begun");
        
       m_autoSelected = m_chooser.getSelected();
+      commandSequences.teamChangeAngle(0);
 
       if(m_autoSelected == test)
         return AutoBuilder.buildAuto("test");
@@ -207,10 +209,8 @@ public class RobotContainer {
       if(m_autoSelected == SPthreeNeightNseven)
         return AutoBuilder.buildAuto("SPthreeNeightNseven");
 
-      if(m_autoSelected == justShoot)
-        return new SequentialCommandGroup(
-          commandSequences.justShoot(swerveSubsystem, pitchMotorSubsystem, shootingMotorSubsystem, intakeMotorSubsystem)
-        );
+      if(m_autoSelected == tftftest)
+        return commandSequences.test(swerveSubsystem);
 
     return null;
   }

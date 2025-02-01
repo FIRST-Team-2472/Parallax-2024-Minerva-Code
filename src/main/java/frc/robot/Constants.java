@@ -33,7 +33,7 @@ public final class Constants {
 
   public static final class SensorConstants {
     public static final int kPigeonID = 13;
-    public static final double sizeOfFieldMeters = 16.5;
+    public static final double sizeOfFieldMeters = 17.55;
     public static final int kPhotoElectricSensorID = 2;
   }
 
@@ -100,8 +100,8 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 1;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+    public static final double kMaxSpeedMetersPerSecond = 6;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
     public static final double kPXController = 1.5;
     public static final double kPYController = 1.5;
     public static final double kPThetaController = 1.5;
