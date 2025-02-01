@@ -210,7 +210,7 @@ public class RobotContainer {
         return AutoBuilder.buildAuto("SPthreeNeightNseven");
 
       if(m_autoSelected == tftftest)
-        return commandSequences.test(swerveSubsystem);
+        return new ParallelCommandGroup(commandSequences.test(swerveSubsystem));
 
     return null;
   }

@@ -119,12 +119,9 @@ public class CommandSequences {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
     public static Rotation2d teamChangeAngle(double degrees){
-        /* if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(-degrees+180);
-        return  Rotation2d.fromDegrees(degrees); */
         if(SwerveSubsystem.isOnRed())
-                return Rotation2d.fromDegrees(degrees);
-        return Rotation2d.fromDegrees(-degrees+180);
+                return  Rotation2d.fromDegrees(-degrees+180);
+        return  Rotation2d.fromDegrees(degrees); 
     }
 
 }
