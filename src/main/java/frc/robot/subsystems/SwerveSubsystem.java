@@ -356,10 +356,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 if(difference.getDegrees() < 2){
                     resetOdometry(botPose);
                 }
-                    if(isOnRed())
+                    if(isOnRed()) {
+                        System.out.println("This runs bluth");
                         setHeading(botPose.getRotation().getDegrees()+180);
-                    else
+                    } else {
                         setHeading(botPose.getRotation().getDegrees());
+                    }
             }
 
             lastSeenPosition = botPose;
@@ -407,9 +409,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // gets the selected team color from the suffleboard
         Optional<Alliance> ally = DriverStation.getAlliance();
         if(ally.isPresent()){
+            System.out.println("Ally present");
             return ally.get() == Alliance.Red;
         }
-
+        System.out.println("Ally is not present");
         String choices = colorChooser.getSelected();
         return choices == "Red";
         // if no team selected on suffleboard, it will default to the field info

@@ -119,6 +119,7 @@ public class CommandSequences {
         return new PosPose2d(x, y, Rotation2d.fromDegrees(angleDegrees));
     }
     public static Rotation2d teamChangeAngle(double degrees){
+        System.out.println("This ran but shouldnt");
         if(SwerveSubsystem.isOnRed())
                 return  Rotation2d.fromDegrees(-degrees+180);
         return  Rotation2d.fromDegrees(degrees); 
