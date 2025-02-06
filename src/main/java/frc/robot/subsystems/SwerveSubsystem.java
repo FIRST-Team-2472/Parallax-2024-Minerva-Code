@@ -342,6 +342,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("frontRight Encoder", getFRAbsEncoder());
         SmartDashboard.putNumber("BackLeft Encoder", getBLAbsEncoder());
         SmartDashboard.putNumber("BackRight Encoder", getBRAbsEncoder());
+        SmartDashboard.putBoolean("is red", isOnRed());
+        //System.out.println("team " + SwerveSubsystem.isOnRed());
 
         LimelightResults llr = LimelightHelpers.getLatestResults("limelight-shooter");
         int fiducialCount = llr.targetingResults.targets_Fiducials.length;
@@ -357,7 +359,6 @@ public class SwerveSubsystem extends SubsystemBase {
                     resetOdometry(botPose);
                 }
                     if(isOnRed()) {
-                        System.out.println("This runs bluth");
                         setHeading(botPose.getRotation().getDegrees()+180);
                     } else {
                         setHeading(botPose.getRotation().getDegrees());
@@ -409,13 +410,11 @@ public class SwerveSubsystem extends SubsystemBase {
         // gets the selected team color from the suffleboard
         Optional<Alliance> ally = DriverStation.getAlliance();
         if(ally.isPresent()){
-            System.out.println("Ally present");
+            //System.out.println("Ally present");
             return ally.get() == Alliance.Red;
         }
-        System.out.println("Ally is not present");
-        String choices = colorChooser.getSelected();
-        return choices == "Red";
-        // if no team selected on suffleboard, it will default to the field info
+        
+        return false;
     }
 
     // send over shuffleboard values

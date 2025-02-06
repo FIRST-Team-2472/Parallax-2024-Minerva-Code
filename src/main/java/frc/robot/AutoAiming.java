@@ -24,7 +24,7 @@ public class AutoAiming {
             yawAngle = flues(robotPos, AutoAimingConstants.redSpeakerPos);
         }
 
-        System.out.println("Desired Yaw: ---------------------------- " + yawAngle);
+        //System.out.println("Desired Yaw: ---------------------------- " + yawAngle);
         SmartDashboard.putNumber("Desired Yaw", yawAngle);
         return yawAngle;
     }
@@ -59,7 +59,7 @@ public class AutoAiming {
         }
 
         pitchAngle = distanceToAngle(distanceFromSpeaker);
-        System.out.println("Desired Pitch: ---------------------------- " + pitchAngle);
+        //System.out.println("Desired Pitch: ---------------------------- " + pitchAngle);
         SmartDashboard.putNumber("Desired Pitch", pitchAngle);
         return pitchAngle;
     }

@@ -110,7 +110,6 @@ public class RobotContainer {
     driverBoard.add("Auto choices", m_chooser).withWidget(BuiltInWidgets.kComboBoxChooser);
     driverBoard.addCamera("Limelight Stream Intake", "limelight_intake", "mjpg:http://limelight-intake.local:5800").withSize(4,4);
     driverBoard.addCamera("Limelight Stream Shooter", "limelight_shooter", "mjpg:http://limelight-shooter.local:5800").withSize(4,4);
-    driverBoard.add("isRed", swerveSubsystem.isOnRed());
 
     //warning a name change will break auto paths because pathplanner will not update it
     NamedCommands.registerCommand("runIntake", new IntakeNoteCmd(intakeMotorSubsystem, pitchMotorSubsystem, 0, 8));
@@ -122,21 +121,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("reset heading", new ResetHeadingCmd(swerveSubsystem, 0));
     NamedCommands.registerCommand("Set Heading 60", new ResetHeadingCmd(swerveSubsystem, 60));
     NamedCommands.registerCommand("Set Heading -60", new ResetHeadingCmd(swerveSubsystem, -60));
-
-    AutoBuilder.configureHolonomic(
-            () -> swerveSubsystem.getPose(), // Robot pose supplier for auto (correct range -180-180)
-            swerveSubsystem ::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            () -> swerveSubsystem.getChassisSpeedsRobotRelative(), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            swerveSubsystem :: runModulesRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            AutoConstants.HOLONOMIC_PATH_FOLLOWER_CONFIG,
-            () -> SwerveSubsystem.isOnRed(),
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-            swerveSubsystem // Reference to this subsystem to set requirements
-        );
-        System.out.println("team " + SwerveSubsystem.isOnRed());
+    
+    System.out.println("team " + SwerveSubsystem.isOnRed());
   }
 
   private void configureBindings() {
@@ -163,7 +149,6 @@ public class RobotContainer {
     System.out.println("Autos Begun");
        
       m_autoSelected = m_chooser.getSelected();
-      commandSequences.teamChangeAngle(0);
 
       if(m_autoSelected == test)
         return AutoBuilder.buildAuto("test");

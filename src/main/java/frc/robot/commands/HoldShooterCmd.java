@@ -19,7 +19,7 @@ public class HoldShooterCmd extends Command{
     @Override
     public void initialize() {
         overideTimer.restart();
-        System.out.println("shooter comand started");
+        //System.out.println("shooter comand started");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class HoldShooterCmd extends Command{
     @Override
     public void end(boolean interrupted) {
         shootingMotorSubsystem.runShooterMotors(0);
-        System.out.println("shooter comand ended" +overideTimer.get());
+        //System.out.println("shooter comand ended" +overideTimer.get());
         if(interrupted)
             System.out.println("interruped");
      }

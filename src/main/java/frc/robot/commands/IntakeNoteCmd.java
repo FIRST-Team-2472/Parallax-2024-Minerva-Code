@@ -30,7 +30,7 @@ public class IntakeNoteCmd extends Command {
     @Override
     public void initialize() {
         timer.restart();
-        System.out.println("intake command started");
+        //System.out.println("intake command started");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class IntakeNoteCmd extends Command {
             }
         }
         if (timer.hasElapsed(startingDelay)) {
-            System.out.println("should be running motors");
+            //System.out.println("should be running motors");
             intakeSubsystem.runIntakeMotors(1);
             intakeSubsystem.runPushMotor(16);
         }
@@ -55,7 +55,7 @@ public class IntakeNoteCmd extends Command {
     public void end(boolean interrupted) {
         intakeSubsystem.runIntakeMotors(0);
         intakeSubsystem.runPushMotor(0);
-        System.out.println("intake command ended, time: " + timer.get());
+        //System.out.println("intake command ended, time: " + timer.get());
     }
 
     @Override

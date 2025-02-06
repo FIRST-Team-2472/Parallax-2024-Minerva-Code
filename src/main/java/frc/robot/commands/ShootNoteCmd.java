@@ -37,9 +37,9 @@ public class ShootNoteCmd extends Command {
 
         timerTwo.stop();
         timerTwo.reset();
-        System.out.println("running");
-        System.out.println("override timer: " + overideTimer.get());
-        System.out.println("" + -1 * rpm);
+        //System.out.println("running");
+        //System.out.println("override timer: " + overideTimer.get());
+        //System.out.println("" + -1 * rpm);
     }
 
     @Override
