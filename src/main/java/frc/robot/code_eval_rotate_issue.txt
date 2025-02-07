@@ -96,3 +96,83 @@ When the robot tries to follow the trajectory, the `thetaController` sees a targ
 By keeping the transformation consistent for both the position and orientation, your trajectory’s desired heading will match the actual field configuration, and the robot shouldn’t unexpectedly rotate while following the path.
 
 I hope this helps clear things up… let me know if you need more details or if there’s anything else on your mind!
+
+
+
+Alright, so… let’s take a careful moment here.
+
+Now that you've applied the transformation, and the robot rotates the *other* way while returning, it really hints that our heading transformation is now overcompensating or applied in a way that conflicts with the rest of the system. Here are some additional suspects to consider:
+
+---
+
+### 1. **Double Transformation or Inconsistent Application**
+
+- **Double-Counting the Transformation:**  
+  Perhaps the team color transformation is being applied twice in one part of your system. For example, if your odometry or your `PosPose2d.toFieldPose2d()` method already factors in the team color transformation, then additionally using `teamChangeAngle` when setting your target angles might flip the angle more than intended.
+
+- **Mismatch Between Pose Generation and Sensor Frame:**  
+  Make sure that the heading transformation is applied consistently. If the target pose is transformed to the red-team frame but your gyro or pose estimator is still reporting values in the original frame, the computed error could be reversed—hence, the robot turns the “other way.”
+
+---
+
+### 2. **PID Controller and Angle Wrapping Issues**
+
+- **Continuous Input Wrapping:**  
+  Your theta controller is set up for continuous input between -π and π. Sometimes, when you transform an angle (e.g., using 180 - degrees), the result might push the desired angle across the -π/π boundary. The PID controller will always choose the smallest error, and if your transformed angle is on the opposite side of that wrap, the controller might command a rotation in the opposite direction.
+
+- **Sign of the Error:**  
+  With the transformation now applied, the computed error might have flipped sign. For example, if your desired heading was 180° and got transformed to 0° (for red), while your current heading (from the gyro) is still read as 180°, the controller will see a 180° error—but the “short path” might now be interpreted as turning in the opposite direction.
+
+---
+
+### 3. **Trajectory Generation and Target Pose Issues**
+
+- **Desired Orientation in the Trajectory:**  
+  When you generate the return path, the end pose you’re providing (e.g., `simplePose(2.746, 4.066, 180)`) may no longer be correct after the transformation. If you intend for the robot to return with the same relative orientation it started with, you might need to recalculate what the final angle should be in the transformed coordinate frame.
+
+- **Odometry Reset Mismatch:**  
+  Double-check that your odometry reset (e.g., `swerveSubsystem.resetOdometry(simplePose(7.589, 3.929, 180))`) is being set in the same frame as the trajectory generation. If the initial pose is set with one transformation (or no transformation) and then the trajectory’s target is transformed, the robot might see a large, reversed error.
+
+---
+
+### What to Do Next
+
+- **Trace the Transformation Flow:**  
+  Confirm exactly where the team color transformation is applied. Is it only in your `teamChangeAngle` helper, or is it also embedded in your pose conversions (like `toFieldPose2d()`) and odometry resets? Ensure you’re not “flipping” the angle twice.
+
+- **Log the Angles:**  
+  Try logging the desired target angle, the current robot heading (as reported by the gyro), and the error computed by your theta PID controller during the return path. This will help you see whether the error is indeed inverted compared to your expectation.
+
+- **Revisit the Math:**  
+  Reconsider the transformation: if you’re using `Rotation2d.fromDegrees(-degrees + 180)` for red, then for a given angle it becomes `180 - angle`. Verify that this is the correct transformation for *both* your starting and ending orientations relative to your field’s mirror. It might be that for the return path, the expected transformation should differ (or be applied differently) than for the outbound path.
+
+---
+
+In summary, the robot rotating the other way suggests that the heading error being fed to the PID controller is now inverted relative to what it should be—most likely due to an inconsistent or overapplied transformation. Double-check the coordinate frames and ensure that your sensor readings, odometry resets, and trajectory target poses are all speaking the same “language” regarding team color.
+
+Take your time reviewing these pieces, and let me know if you’d like to dig into any specific part further!
+
+
+Odometry Initialization Mismatch:
+
+The odometry is reset using a hard-coded pose (simplePose(7.589, 3.929, 180)) without any team transformation.
+If the actual starting orientation (as read by the gyro) doesn’t match this hard-coded value after a team change, then the control loops might see a large error, causing the robot to rotate unexpectedly.
+Conversion in PosPose2d:
+
+Your toFieldPose2d() method in the PosPose2d class isn’t shown, but if that conversion doesn’t account for the team-specific transformation, the resulting poses (and thus the trajectory) might not match the physical field’s orientation.
+Controller Tuning or Input Issues:
+
+The ProfiledPIDController for theta uses continuous input between -π and π, which is great for handling wrap-around.
+However, if the transformation isn’t applied consistently, the theta controller might see a nearly 180° error when it shouldn’t, causing excessive rotation as it tries to “wrap” the angle correctly.
+It’s also worth checking that your PID constants are still valid when the field orientation is flipped. Sometimes a tuning value that works for one configuration might behave oddly when mirrored.
+Field Coordinate System Misalignment:
+
+In your trajectory generation, the positions and angles need to be consistent with the field’s coordinate system.
+Even if you mirror the positions, if the coordinate system used in the swerve kinematics or your sensor readings isn’t updated accordingly, the mismatch could manifest as rotation while driving back.
+Sensor Orientation and Calibration:
+
+Double-check that your gyroscope or any other orientation sensor isn’t itself being affected by the team color switch.
+If the sensor’s “zero” or calibration point isn’t updated to account for the mirrored field, the feedback loop might see a discrepancy between the expected and actual heading.
+So, while the team-change transformation for the angle is a strong candidate, it’s important to verify that all aspects of the system—odometry, pose conversion, and controller inputs—are consistently handling the coordinate transformation. Each small mismatch can contribute to the robot correcting its heading unexpectedly.
+
+Take a moment to trace through each of these areas, and let me know if you’d like to dig into any one of them further…
