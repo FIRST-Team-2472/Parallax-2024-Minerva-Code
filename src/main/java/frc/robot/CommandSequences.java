@@ -57,10 +57,10 @@ public class CommandSequences {
 
         public Command test(SwerveSubsystem swerveSubsystem) {
 
-                swerveSubsystem.resetOdometry(simplePose(7.589, 3.929, 180));
+                swerveSubsystem.resetOdometry(simplePose(7.589, 3.929, teamChangeAngle(0).getDegrees()));
         
                 return new SequentialCommandGroup(
-                    generatePath(swerveSubsystem, simplePose(7.589, 3.929, 180), List.of(), simplePose(2.746, 4.066, 180)));
+                    generatePath(swerveSubsystem, simplePose(7.589, 3.929, teamChangeAngle(0).getDegrees()), List.of(), simplePose(2.746, 4.066, teamChangeAngle(0).getDegrees())));
         }
 
     // generates a path via points
@@ -120,7 +120,7 @@ public class CommandSequences {
     }
     public static Rotation2d teamChangeAngle(double degrees){
         if(SwerveSubsystem.isOnRed())
-                return  Rotation2d.fromDegrees(-degrees+180);
+                return  Rotation2d.fromDegrees(degrees+180);
         return  Rotation2d.fromDegrees(degrees); 
     }
 
